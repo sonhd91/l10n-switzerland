@@ -4,13 +4,13 @@
 {
     "name": "Switzerland - Bank type",
     "summary": "Types and number validation for swiss electronic pmnt. DTA, ESR",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.0.1",
     "author": "Camptocamp,Odoo Community Association (OCA)",
     "category": "Localization",
     "website": "https://github.com/OCA/l10n-switzerland",
     "license": "AGPL-3",
     "depends": ["base_iban", "l10n_ch"],
     "data": ["views/bank.xml"],
-    "auto_install": False,
+    "auto_install": True,
     "installable": True,
 }
