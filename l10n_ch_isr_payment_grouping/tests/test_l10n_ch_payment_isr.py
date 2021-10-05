@@ -14,25 +14,26 @@ ISR2 = "120000000000234478943216899"
 class PaymentISR(common.TransactionCase):
     """Test grouping of payment by ISR reference"""
 
-    def _load(self, module, *args):
+    def _load(self, module, components, file):
+        file_path = get_resource_path(module) + "/" + components + "/" + file
         tools.convert_file(
-            self.cr,
-            "l10n_ch",
-            get_resource_path(module, *args),
-            {},
-            "init",
-            False,
-            "test",
-            self.registry._assertion_report,
+            cr=self.cr,
+            module="l10n_ch",
+            filename=file_path,
+            idref={},
+            mode="init",
+            noupdate=False,
+            kind="test",
+            pathname=file_path,
         )
 
     def create_supplier_invoice(
         self, supplier, ref, currency_to_use="base.CHF", inv_date=None
     ):
         """ Generates a test invoice """
-        f = Form(self.env["account.move"].with_context(default_type="in_invoice"))
+        f = Form(self.env["account.move"].with_context(default_move_type="in_invoice"))
         f.partner_id = supplier
-        f.invoice_payment_ref = ref
+        f.payment_reference = ref
         f.currency_id = self.env.ref(currency_to_use)
         f.invoice_date = inv_date or time.strftime("%Y") + "-12-22"
         with f.invoice_line_ids.new() as line:
@@ -62,7 +63,7 @@ class PaymentISR(common.TransactionCase):
 
     def setUp(self):
         super().setUp()
-        self._load("account", "test", "account_minimal_test.xml")
+        self._load("l10n_ch_isr_payment_grouping", "tests", "account_minimal_test.xml")
         self.payment_method_manual_in = self.env.ref(
             "account.account_payment_method_manual_in"
         )
