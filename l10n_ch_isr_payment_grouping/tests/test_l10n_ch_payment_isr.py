@@ -115,7 +115,6 @@ class PaymentISR(common.TransactionCase):
         PaymentRegister = self.env["account.payment.register"]
         ctx = {"active_model": "account.move", "active_ids": invoices.ids}
         register = PaymentRegister.with_context(ctx).create({"group_payment": True})
-
         vals = register.get_payments_vals()
         self.assertEqual(len(vals), 4)
         expected_vals = [
@@ -226,7 +225,7 @@ class PaymentISR(common.TransactionCase):
 
         """
         # This differs from v12 where an automatic grouping is done anyway
-        # v13 respects the choice of the user
+        # v13 and v14 respects the choice of the user
         invoices = self.create_supplier_invoice(
             self.supplier_iban, "INV1"
         ) | self.create_supplier_invoice(self.supplier_iban, "INV2")
